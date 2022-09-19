@@ -13,7 +13,7 @@ b = False
 print(type(b))
 #4. Строкового типа
 m = "15,5"
-print(type(t))
+print(type(m))
 #5. Пустого типа
 a = None
 print(type(a))
