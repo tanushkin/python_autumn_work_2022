@@ -53,10 +53,12 @@ print()
 
 # 3. Выдавать информацию о записи пациента к врачу;
 print('3. Выдавать информацию о записи пациента к врачу')
-zapis_po_uchastky = input('Введите номер участка: ')
-SQL_SELECT_PO_UCHASTKY = f"""SELECT p.surname, p.name, v.surname, v.name, v.patroin
-                            FROM pacient p, vrach v
-                            WHERE  p.uchastok = '{zapis_po_uchastky}'"""
+uch = input('Введите номер участка: ')
+SQL_SELECT_PO_UCHASTKY = f"""SELECT v.*, p.* from grouppa g, pacient p, raspisanie r, vrach v
+                             WHERE g.id_pacients = p.id
+                             AND g.id_raspisanie = r.id
+                             AND r.id_vrach = v.id
+                             AND p.uchastok = '{uch}'"""
 
 cur.execute(SQL_SELECT_PO_UCHASTKY)
 
@@ -72,10 +74,10 @@ print()
 print('4. Выдавать информацию о приеме врачей на указанную дату')
 data_priema = input('Введите дату: ')
 
-SQL_PRIEM_VRACHA = f"""SELECT id_vrach, vremya, den_nedeli
-                    FROM raspisanie
-                    WHERE  data = '{data_priema}'"""
-# 2022-11-01
+SQL_PRIEM_VRACHA = f"""SELECT vremya r, den_nedeli r, surname v, name v, patroin v
+                    FROM raspisanie r, vrach v
+                    WHERE  v.id = r.id_vrach
+                    AND r.data = '{data_priema}'"""
 cur.execute(SQL_PRIEM_VRACHA)
 
 # Retrieve query results
@@ -90,8 +92,8 @@ print()
 print('5. Выдавать информацию о пациентах, имеющих льготы на приобретение лекарств')
 
 # llo_number = input('Введите запрос: ')
-SQL_LLO = f"""SELECT *
-              FROM pacient
+SQL_LLO = f"""SELECT p.surname, p.name, p.patrion
+              FROM pacient p
               WHERE llo is true"""
 
 cur.execute(SQL_LLO)
